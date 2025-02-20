@@ -10,8 +10,31 @@ void TestComponentsToSeconds(){
 	// Random but "safe" inputs
 	long long unsigned int t = TimeCode::ComponentsToSeconds(3, 17, 42);
 	assert(t == 11862);
-	
-	// More tests go here!
+
+    // Test Case 3: One hour
+    long long unsigned int t3 = TimeCode::ComponentsToSeconds(1, 0, 0);
+    assert(t3 == 3600);  // Expected: 3600 seconds
+
+    // Test Case 4: One minute
+    long long unsigned int t4 = TimeCode::ComponentsToSeconds(0, 1, 0);
+    assert(t4 == 60);  // Expected: 60 seconds
+
+    // Test Case 5: One second
+    long long unsigned int t5 = TimeCode::ComponentsToSeconds(0, 0, 1);
+    assert(t5 == 1);  // Expected: 1 second
+
+    // Test Case 6: Edge case 
+    long long unsigned int t6 = TimeCode::ComponentsToSeconds(0, 59, 59);
+    assert(t6 == 3599);  
+
+    // Test Case 7: Large hour to seconds
+    long long unsigned int t7 = TimeCode::ComponentsToSeconds(99, 0, 0);
+    assert(t7 == 356400);  
+
+	// Test Case 2: Zero time
+    long long unsigned int t2 = TimeCode::ComponentsToSeconds(0, 0, 0);
+    assert(t2 == 0); 
+
 	
 	cout << "PASSED!" << endl << endl;
 }
@@ -36,14 +59,15 @@ void TestComponentConstructor(){
 	cout << "tc: " << tc.ToString() << endl;
 	assert(tc.ToString() == "0:0:0");
 	
-	// more tests go here!
-	
+	// Test Case 2: Overflow Test
+    TimeCode tc4 = TimeCode(99, 99, 99);
+    cout << "tc4: " << tc4.ToString() << endl;
+    assert(tc4.ToString() == "100:40:39");
+
 	// Roll-over inputs
 	TimeCode tc3 = TimeCode(3, 71, 3801);
 	cout << "tc3: " << tc3.ToString() << endl;
 	assert(tc3.ToString() == "5:14:21");
-	
-	// More tests go here!
 	
 	cout << "PASSED!" << endl << endl;
 }
@@ -56,12 +80,20 @@ void TestGetComponents(){
 	unsigned int m;
 	unsigned int s;
 	
-	// Regular values
-	TimeCode tc = TimeCode(5, 2, 18);
-	tc.GetComponents(h, m, s);
+	// Test Case 1: 
+	TimeCode tc1 = TimeCode(5, 2, 18);
+	tc1.GetComponents(h, m, s);
 	assert(h == 5 && m == 2 && s == 18);
 	
-	// More tests go here!
+	// Test Case 2: 
+	TimeCode tc2 = TimeCode(0, 0, 0);
+	tc2.GetComponents(h, m, s);
+	assert(h == 0 && m == 0 && s == 0);
+	
+	// Test Case 3: roll over cases
+	TimeCode tc3 = TimeCode(99, 99, 99);
+	tc3.GetComponents(h, m, s);
+	assert(h == 100 && m == 40 && s == 39);
 	
 	cout << "PASSED!" << endl << endl;
 }
@@ -190,6 +222,13 @@ void TestEqualityOperator() {
     assert(!(tc1 == tc5));
     cout << "Test Case 4 Passed!" << endl;
 
+	// Test Case 5: different time should not be equal
+	TimeCode tc6(0, 0, 0);
+	assert(!(tc6 == tc5));
+	cout << "Test Case 5 Passed!" << endl;
+
+
+
     cout << "Equality Operator Test PASSED!" << endl << endl;
 }
 
@@ -268,6 +307,17 @@ void TestSetMinutes()
 
 	cout << "PASSED!" << endl << endl;
 }
+
+void TestResetFunction() {
+    cout << "Testing Reset" << endl;
+    
+    TimeCode tc(10, 30, 30); 
+    assert(tc.ToString() == "10:30:30");
+    tc.reset(); 
+    assert(tc.ToString() == "0:0:0");
+
+    cout << "Reset Function Test PASSED!" << endl << endl;
+}
 	
 int main(){
 	TestComponentsToSeconds();
@@ -281,6 +331,7 @@ int main(){
 	TestEqualityOperator();
 	TestInequalityOperator();
 	TestComparisonOperator();
+	TestResetFunction();
 	
 	cout << "PASSED ALL TESTS!!!" << endl;
 	return 0;

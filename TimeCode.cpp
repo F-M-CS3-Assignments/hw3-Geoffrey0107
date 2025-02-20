@@ -9,23 +9,27 @@ TimeCode:: TimeCode(unsigned int hr, unsigned int min, long long unsigned int se
    //cout << "Constructor called: hr=" << hr << ", min=" << min << ", sec=" << sec << ", t=" << t << endl;
 }
 
+// This function sets the total seconds by multiplying hours by 3600.(3600 seconds in an hour)
 void TimeCode::SetHours(unsigned int hours){
     t = t+ 3600 * hours;
 }
 
+// This function sets the total seconds by multiplying minutes by 60.(60 seconds in a minute)
 void TimeCode::SetMinutes(unsigned int minutes){
     t = t + 60 * minutes;
 }
 
+// This function sets the total seconds by just adding the seconds
 void TimeCode::SetSeconds(unsigned int seconds){
     t += seconds;
 }
 
+// This function resets the time
 void TimeCode::reset(){
     t = 0;
 }
 // hours = t/3600 because t represents the total seconds, each hour is 3600 seconds, 
-// we do not worry about the remainder because they are less than an hour, so dividing 
+// we do not need to worry about the remainder because they are less than an hour, so dividing 
 // finds us the total number of hours.
 unsigned int TimeCode::GetHours() const{
     return t / 3600;
@@ -45,6 +49,9 @@ unsigned int TimeCode::GetSeconds() const{
 }
 
 void TimeCode::GetComponents(unsigned int& hr, unsigned int& min, unsigned int& sec) const{
+    // if(min > 59 || sec > 59){
+    //     throw invalid_argument("Invalid minutes or seconds");
+    // }
     hr = GetHours();
     min = GetMinutes();
     sec = GetSeconds();
@@ -94,6 +101,7 @@ TimeCode TimeCode::operator -(const TimeCode& other) const{
     other.GetComponents(newh, newm, news);
     total = ComponentsToSeconds(h,m,s) - ComponentsToSeconds(newh,newm,news);
     if(total < 0){
+        TimeCode reset();
         throw invalid_argument("Subtraction results a negative number.");
     }
     return TimeCode(0,0,total);
@@ -111,6 +119,7 @@ TimeCode TimeCode::operator *(double a) const{
     GetComponents(h,m,s);
     result = ComponentsToSeconds(h,m,s) * a;
     if(result < 0){
+        TimeCode reset();
         throw invalid_argument("Multiplication results a negative number.");
     }
 
@@ -125,6 +134,7 @@ TimeCode TimeCode::operator *(double a) const{
 // This function catches an exception when the denominator is zero.
 TimeCode TimeCode::operator /(double a) const{
     if(a == 0){
+        TimeCode reset();
         throw invalid_argument("Division by zero is not allowed.");
     }
     unsigned int h, m, s;
