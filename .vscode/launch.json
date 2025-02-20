@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "Debug TimeCodeTests",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/TimeCodeTests",
+            "cwd": "${workspaceFolder}",
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "text": "-enable-pretty-printing",
+                    "description": "Enable pretty printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}

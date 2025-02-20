@@ -1,0 +1,21 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "Build TimeCodeTests",
+            "command": "/usr/bin/g++-11",
+            "args": [
+                "-g",
+                "TimeCode.cpp",
+                "TimeCodeTests.cpp",
+                "-o",
+                "TimeCodeTests"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ],
+    "version": "2.0.0"
+}

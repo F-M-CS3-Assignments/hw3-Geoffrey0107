@@ -1,0 +1,186 @@
+#include <iostream>
+#include <assert.h>
+using namespace std;
+
+#include "TimeCode.h"
+
+TimeCode:: TimeCode(unsigned int hr, unsigned int min, long long unsigned int sec){
+   t = 3600 * hr + 60* min + sec;
+   //cout << "Constructor called: hr=" << hr << ", min=" << min << ", sec=" << sec << ", t=" << t << endl;
+}
+
+void TimeCode::SetHours(unsigned int hours){
+    t = t+ 3600 * hours;
+}
+
+void TimeCode::SetMinutes(unsigned int minutes){
+    t = t + 60 * minutes;
+}
+
+void TimeCode::SetSeconds(unsigned int seconds){
+    t += seconds;
+}
+
+void TimeCode::reset(){
+    t = 0;
+}
+// hours = t/3600 because t represents the total seconds, each hour is 3600 seconds, 
+// we do not worry about the remainder because they are less than an hour, so dividing 
+// finds us the total number of hours.
+unsigned int TimeCode::GetHours() const{
+    return t / 3600;
+}
+
+// t mod 3600 finds the remainder after dividing by 3600, in other words, how many seconds 
+// left after subtracting the number of hours. we do not worry about the seconds, because 
+// integer division only returns an integer, rouned down. 
+unsigned int TimeCode::GetMinutes() const{
+    return (t % 3600)/60;
+}
+// Since the number of seconds is the lowest rank in total t, any seconds larger than 60 is
+// either in minutes or hours, so t mod 60 finds us the remaining seconds, which is the seconds 
+// for a time. 
+unsigned int TimeCode::GetSeconds() const{
+    return t % 60;
+}
+
+void TimeCode::GetComponents(unsigned int& hr, unsigned int& min, unsigned int& sec) const{
+    hr = GetHours();
+    min = GetMinutes();
+    sec = GetSeconds();
+    //cout << "GetComponents called: hr=" << hr << ", min=" << min << ", sec=" << sec << endl;
+}
+
+long long unsigned int TimeCode::ComponentsToSeconds(unsigned int hr, unsigned int min, unsigned long long int sec){
+    long long unsigned int result;
+    result = hr * 3600 + min * 60 + sec;
+    return result;
+}
+
+string TimeCode::ToString() const {
+    string result;
+    result = std::to_string(GetHours()) + ":" + to_string(GetMinutes()) + ":" + to_string(GetSeconds());
+    return result;
+}
+
+TimeCode TimeCode::operator +(const TimeCode& other) const{
+    unsigned int h, m, s;
+    unsigned int newh, newm, news;
+    unsigned long long int total;
+    GetComponents(h,m,s);
+    other.GetComponents(newh, newm, news);
+    total = ComponentsToSeconds(h,m,s) + ComponentsToSeconds(newh,newm,news);
+    return TimeCode(0,0,total);
+}
+TimeCode TimeCode::operator -(const TimeCode& other) const{
+    unsigned int h, m, s;
+    unsigned int newh, newm, news;
+    long long int total;
+    GetComponents(h,m,s);
+    other.GetComponents(newh, newm, news);
+    total = ComponentsToSeconds(h,m,s) - ComponentsToSeconds(newh,newm,news);
+    if(total < 0){
+        throw invalid_argument("Subtraction results a negative number.");
+    }
+    return TimeCode(0,0,total);
+}
+TimeCode TimeCode::operator *(double a) const{
+    unsigned int h, m, s;
+    long long int result;
+    GetComponents(h,m,s);
+    result = ComponentsToSeconds(h,m,s) * a;
+    if(result < 0){
+        throw invalid_argument("Multiplication results a negative number.");
+    }
+
+    return TimeCode(0,0,result);
+}   
+
+TimeCode TimeCode::operator /(double a) const{
+    if(a == 0){
+        throw invalid_argument("Division by zero is not allowed.");
+    }
+    unsigned int h, m, s;
+    long long int result  = 0;
+    GetComponents(h,m,s);
+    result = (h * 3600 + m * 60 + s)/a;
+
+    return TimeCode(0,0,result);
+}
+
+bool TimeCode::operator == (const TimeCode& other) const{
+    unsigned int h, m, s;
+    unsigned int newh, newm, news;
+    GetComponents(h,m,s);
+    other.GetComponents(newh, newm, news);
+
+    if(ComponentsToSeconds(h,m,s) == ComponentsToSeconds(newh,newm,news)){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+bool TimeCode::operator != (const TimeCode& other) const{
+    unsigned int h, m, s;
+    unsigned int newh, newm, news;
+    GetComponents(h,m,s);
+    other.GetComponents(newh, newm, news);
+
+    if(ComponentsToSeconds(h,m,s) != ComponentsToSeconds(newh,newm,news)){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+bool TimeCode::operator < (const TimeCode& other) const{
+    unsigned int h, m, s;
+    unsigned int newh, newm, news;
+    GetComponents(h,m,s);
+    other.GetComponents(newh, newm, news);
+    if(ComponentsToSeconds(h,m,s) < ComponentsToSeconds(newh,newm,news)){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+bool TimeCode::operator <= (const TimeCode& other) const{
+    unsigned int h, m, s;
+    unsigned int newh, newm, news;
+    GetComponents(h,m,s);
+    other.GetComponents(newh, newm, news);
+    if(ComponentsToSeconds(h,m,s) < ComponentsToSeconds(newh,newm,news) || ComponentsToSeconds(h,m,s) == ComponentsToSeconds(newh,newm,news)){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+bool TimeCode::operator > (const TimeCode& other) const{
+    unsigned int h, m, s;
+    unsigned int newh, newm, news;
+    GetComponents(h,m,s);
+    other.GetComponents(newh, newm, news);
+    if(ComponentsToSeconds(h,m,s) > ComponentsToSeconds(newh,newm,news)){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+bool TimeCode::operator >= (const TimeCode& other) const{
+    unsigned int h, m, s;
+    unsigned int newh, newm, news;
+    GetComponents(h,m,s);
+    other.GetComponents(newh, newm, news);
+    if(ComponentsToSeconds(h,m,s) >= ComponentsToSeconds(newh,newm,news) || ComponentsToSeconds(h,m,s) == ComponentsToSeconds(newh,newm,news)){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
