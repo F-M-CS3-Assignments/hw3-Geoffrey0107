@@ -83,7 +83,6 @@ void TestAddition() {
 	assert(tc5.ToString() == tc1.ToString());
 	cout << "Test Case 2 Passed!" << endl;
 
-
     cout << "Addition Operator Test PASSED!" << endl << endl;
 }
 
@@ -269,15 +268,8 @@ void TestSetMinutes()
 
 	cout << "PASSED!" << endl << endl;
 }
-
-
-
-
-// Many More Tests...
-
 	
 int main(){
-	
 	TestComponentsToSeconds();
 	TestDefaultConstructor();
 	TestComponentConstructor();
@@ -289,8 +281,6 @@ int main(){
 	TestEqualityOperator();
 	TestInequalityOperator();
 	TestComparisonOperator();
-	
-	// Many othere test functions...
 	
 	cout << "PASSED ALL TESTS!!!" << endl;
 	return 0;

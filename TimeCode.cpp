@@ -51,18 +51,25 @@ void TimeCode::GetComponents(unsigned int& hr, unsigned int& min, unsigned int& 
     //cout << "GetComponents called: hr=" << hr << ", min=" << min << ", sec=" << sec << endl;
 }
 
+// This function turns the instance variables hr, min and sec to a total seconds variable result.
 long long unsigned int TimeCode::ComponentsToSeconds(unsigned int hr, unsigned int min, unsigned long long int sec){
     long long unsigned int result;
     result = hr * 3600 + min * 60 + sec;
     return result;
 }
 
+// This function changes int variable hour, minutes and seconds to a string and concatonates them together.
 string TimeCode::ToString() const {
     string result;
-    result = std::to_string(GetHours()) + ":" + to_string(GetMinutes()) + ":" + to_string(GetSeconds());
+    result = to_string(GetHours()) + ":" + to_string(GetMinutes()) + ":" + to_string(GetSeconds());
     return result;
 }
 
+// This function overloads the '+' operator to add two TimeCode objects.
+// It uses the hours, minutes, and seconds from both objects with the GetComponents function,
+// converts them into total seconds with the ComponentsToSeconds function, and adds them up.
+// The result is then used to construct a new TimeCode object representing the total time, only
+// the seconds are passed because the Set functions will convert total seconds to hour, minutes and seconds.
 TimeCode TimeCode::operator +(const TimeCode& other) const{
     unsigned int h, m, s;
     unsigned int newh, newm, news;
@@ -72,6 +79,13 @@ TimeCode TimeCode::operator +(const TimeCode& other) const{
     total = ComponentsToSeconds(h,m,s) + ComponentsToSeconds(newh,newm,news);
     return TimeCode(0,0,total);
 }
+
+// This function overloads the '-' operator to subtract two TimeCode objects.
+// It uses the hours, minutes, and seconds from both objects with the GetComponents function,
+// converts them into total seconds with the ComponentsToSeconds function, and subtracts them.
+// The result is then used to construct a new TimeCode object representing the total time, only
+// the seconds are passed because the Set functions will convert total seconds to hour, minutes and seconds.
+// This function catches an exception when the resulting time is negative.
 TimeCode TimeCode::operator -(const TimeCode& other) const{
     unsigned int h, m, s;
     unsigned int newh, newm, news;
@@ -84,6 +98,13 @@ TimeCode TimeCode::operator -(const TimeCode& other) const{
     }
     return TimeCode(0,0,total);
 }
+
+// This function overloads the '*' operator to multiply a TimeCode object and a double variable a.
+// It uses the hours, minutes, and seconds from a TimeCode object with the GetComponents function,
+// converts them into total seconds with the ComponentsToSeconds function, and Multiply it with the double 
+// variable. The result is then used to construct a new TimeCode object representing the total time, only
+// the seconds are passed because the Set functions will convert total seconds to hour, minutes and seconds.
+// This function also catches a invalid result when the multiplication results in a negative number.
 TimeCode TimeCode::operator *(double a) const{
     unsigned int h, m, s;
     long long int result;
@@ -96,6 +117,12 @@ TimeCode TimeCode::operator *(double a) const{
     return TimeCode(0,0,result);
 }   
 
+// This function overloads the '/' operator to divide a TimeCode object and a double variable a.
+// It uses the hours, minutes, and seconds from a TimeCode object with the GetComponents function,
+// converts them into total seconds with the ComponentsToSeconds function, and divide it with the double 
+// variable. The result is then used to construct a new TimeCode object representing the total time, only
+// the seconds are passed because the Set functions will convert total seconds to hour, minutes and seconds.
+// This function catches an exception when the denominator is zero.
 TimeCode TimeCode::operator /(double a) const{
     if(a == 0){
         throw invalid_argument("Division by zero is not allowed.");
@@ -108,6 +135,9 @@ TimeCode TimeCode::operator /(double a) const{
     return TimeCode(0,0,result);
 }
 
+// This function overloads the '==' operator to compare two TimeCode objects. It uses the hours, minutes, 
+// and seconds from a TimeCode object with the GetComponents function, converts them into total seconds with 
+// the ComponentsToSeconds function, compare the total seconds of the two objects. 
 bool TimeCode::operator == (const TimeCode& other) const{
     unsigned int h, m, s;
     unsigned int newh, newm, news;
@@ -121,6 +151,10 @@ bool TimeCode::operator == (const TimeCode& other) const{
         return false;
     }
 }
+
+// This function overloads the '!=' operator to compare if two TimeCode objects are different. It uses the hours, minutes, 
+// and seconds from a TimeCode object with the GetComponents function, converts them into total seconds with 
+// the ComponentsToSeconds function, compare the total seconds of the two objects. 
 bool TimeCode::operator != (const TimeCode& other) const{
     unsigned int h, m, s;
     unsigned int newh, newm, news;
@@ -135,6 +169,9 @@ bool TimeCode::operator != (const TimeCode& other) const{
     }
 }
 
+// This function overloads the '<' operator to compare if two TimeCode objects are different. It uses the hours, minutes, 
+// and seconds from a TimeCode object with the GetComponents function, converts them into total seconds with 
+// the ComponentsToSeconds function, compare the total seconds of the two objects. 
 bool TimeCode::operator < (const TimeCode& other) const{
     unsigned int h, m, s;
     unsigned int newh, newm, news;
@@ -147,6 +184,10 @@ bool TimeCode::operator < (const TimeCode& other) const{
         return false;
     }
 }
+
+// This function overloads the '<=' operator to compare if two TimeCode objects are different or equal. It uses the hours, minutes, 
+// and seconds from a TimeCode object with the GetComponents function, converts them into total seconds with 
+// the ComponentsToSeconds function, compare the total seconds of the two objects. 
 bool TimeCode::operator <= (const TimeCode& other) const{
     unsigned int h, m, s;
     unsigned int newh, newm, news;
@@ -160,6 +201,9 @@ bool TimeCode::operator <= (const TimeCode& other) const{
     }
 }
 
+// This function overloads the '!=' operator to compare if two TimeCode objects are different. It uses the hours, minutes, 
+// and seconds from a TimeCode object with the GetComponents function, converts them into total seconds with 
+// the ComponentsToSeconds function, compare the total seconds of the two objects. 
 bool TimeCode::operator > (const TimeCode& other) const{
     unsigned int h, m, s;
     unsigned int newh, newm, news;
@@ -172,6 +216,10 @@ bool TimeCode::operator > (const TimeCode& other) const{
         return false;
     }
 }
+
+// This function overloads the '!=' operator to compare if two TimeCode objects are different or equal. It uses the hours, minutes, 
+// and seconds from a TimeCode object with the GetComponents function, converts them into total seconds with 
+// the ComponentsToSeconds function, compare the total seconds of the two objects. 
 bool TimeCode::operator >= (const TimeCode& other) const{
     unsigned int h, m, s;
     unsigned int newh, newm, news;
