@@ -1,18 +1,21 @@
 {
     "version": "0.2.0",
     "configurations": [
-        
         {
-            "name": "Debug TimeCodeTests",
+            "name": "C++ Debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/TimeCodeTests",
+            "program": "${workspaceFolder}/tct",
+            "args": [],
+            "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "integratedTerminal",
             "MIMode": "gdb",
             "setupCommands": [
                 {
+                    "description": "Enable pretty-printing for gdb",
                     "text": "-enable-pretty-printing",
-                    "description": "Enable pretty printing",
                     "ignoreFailures": true
                 }
             ]

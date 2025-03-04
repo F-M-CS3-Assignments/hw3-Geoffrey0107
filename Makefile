@@ -1,5 +1,5 @@
 all:
-	g++ TimeCode.cpp TimeCodeTests.cpp -o tct
+	g++ TimeCode.cpp TimeCodeTestsfinal.cpp -o tct
 
 run:
 	./tct
