@@ -21,8 +21,8 @@ TimeCode parse_line(string line){
     if (words.size() == 3) {  
         timeList.push_back(words[1]);
         stringstream ss(words[1]);
-        getline(ss, hours, ':');
-        getline(ss, minutes, ':');
+        getline(ss, hours, ':');//first extracts value up to the hour
+        getline(ss, minutes, ':');//second extracts value up to the minute
         return TimeCode(stoi(hours),stoi(minutes), 0);
     }
     return TimeCode(0,0,0);
@@ -65,6 +65,7 @@ int main() {
     while (getline(inFile, line)) {//getline reads next line in file until ending
         launchTimes = split(line, ',');//splits the line by ","
         time = launchTimes[4]; // gets the fourth string of the line which represents time
+        cout << launchTimes[4] << endl;
         if (!(parse_line(time).ToString() == "0:0:0")) {// if parsed time is not empty
             sum = sum + parse_line(time);
             datapoint++;
