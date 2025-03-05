@@ -109,11 +109,8 @@ TimeCode TimeCode::operator -(const TimeCode& other) const{
     if(total < 0){
         throw invalid_argument("Subtraction results a negative number.");
     }
-    unsigned int result_h = total / 3600;
-    total %= 3600;
-    unsigned int result_m = total / 60;
-    unsigned int result_s = total % 60;
-    return TimeCode(result_h, result_m, result_s);
+    
+    return TimeCode(0,0,total);
 }
 
 // This function overloads the '*' operator to multiply a TimeCode object and a double variable a.

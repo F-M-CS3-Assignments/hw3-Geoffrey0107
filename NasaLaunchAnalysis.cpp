@@ -21,8 +21,12 @@ TimeCode parse_line(string line){
     if (words.size() == 3) {  
         timeList.push_back(words[1]);
         stringstream ss(words[1]);
+        //https://www.geeksforgeeks.org/getline-string-c/
+        // getline() can be used to extract string by delimiter
         getline(ss, hours, ':');//first extracts value up to the hour
         getline(ss, minutes, ':');//second extracts value up to the minute
+        // the first value is discarded after extraction, so the only
+        // thing left in string stream is the second object
         return TimeCode(stoi(hours),stoi(minutes), 0);
     }
     return TimeCode(0,0,0);
@@ -70,6 +74,7 @@ int main() {
             sum = sum + parse_line(time);
             datapoint++;
         }
+        //datapoint++;
     }
     cout << "Datapoints: " << datapoint << endl;
     cout << "average: " << (sum / datapoint).ToString() << endl;
