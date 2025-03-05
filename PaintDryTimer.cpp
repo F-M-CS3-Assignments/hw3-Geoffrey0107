@@ -26,8 +26,11 @@ struct DryingSnapShot {
 
 
 long long int get_time_remaining(DryingSnapShot dss){
-	// Replace with your code
-	return 0;
+	int secondsElapsed = time(0) - dss.startTime;
+	TimeCode timeElapsed = TimeCode(0,0,secondsElapsed);
+	//dereference a pointer before performing operations such as "-"
+	TimeCode timeRemaining = *(dss.timeToDry) - timeElapsed;
+	return timeRemaining.GetSeconds();
 }
 
 
@@ -56,6 +59,7 @@ void tests(){
 	TimeCode tc = TimeCode(0, 0, 7);
 	dss.timeToDry = &tc;
 	long long int ans = get_time_remaining(dss);
+	cout << "Time remaining: " << ans << endl;
 	assert(ans > 6 && ans < 8);
 	// add more tests here
 
@@ -82,7 +86,6 @@ void tests(){
 
 
 int main(){
-	// replace with your code
-	//tests());
-	return 0;
+	tests();
+    return 0;
 }
