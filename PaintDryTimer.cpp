@@ -89,9 +89,9 @@ void tests(){
     // no remaining time
     DryingSnapShot dss2;
     dss2.name = "instant-dry";
-    dss2.startTime = time(0) - 5; 
-    dss2.timeToDry = new TimeCode(0, 0, 5);
-    long long remaining = get_time_remaining(dss2);
+    dss2.startTime = time(0) - 10; 
+    dss2.timeToDry = new TimeCode(0, 0, 10);
+    int remaining = get_time_remaining(dss2);
     cout << "Remaining for instant-dry is " << remaining << endl;
     assert(remaining <= 0);
     delete dss2.timeToDry;

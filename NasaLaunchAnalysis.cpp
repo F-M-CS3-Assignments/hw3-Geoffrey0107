@@ -7,10 +7,10 @@
 using namespace std;
 int i;
 
-TimeCode parse_line(string line){
+// change return type to bool, if invalid object encountered, return false
+bool parse_line(string line, TimeCode &tc){
     string minutes;
     string hours;
-    vector<string> timeList;
     stringstream ss(line);
     string word;
     vector<string> words;
@@ -19,7 +19,6 @@ TimeCode parse_line(string line){
         words.push_back(word);
     }
     if (words.size() == 3) {  
-        timeList.push_back(words[1]);
         stringstream ss(words[1]);
         //https://www.geeksforgeeks.org/getline-string-c/
         // getline() can be used to extract string by delimiter
@@ -27,9 +26,13 @@ TimeCode parse_line(string line){
         getline(ss, minutes, ':');//second extracts value up to the minute
         // the first value is discarded after extraction, so the only
         // thing left in string stream is the second object
-        return TimeCode(stoi(hours),stoi(minutes), 0);
+        tc = TimeCode(stoi(hours), stoi(minutes), 0);
+        return true;
+    }else{
+        tc = TimeCode(0,0,0); 
+        return false;
     }
-    return TimeCode(0,0,0);
+    
 }
  
 
@@ -56,10 +59,11 @@ int main() {
     string time;
     TimeCode sum (0,0,0);
     int datapoint = 0;
+    TimeCode tc;
 
     inFile.open("Space_Corrected.csv");
     if (!inFile.is_open()) {
-        cerr << "Error: Could not open file." << endl;
+        cout << "Error: Could not open file." << endl;
         return 1;
     }
 
@@ -69,12 +73,10 @@ int main() {
     while (getline(inFile, line)) {//getline reads next line in file until ending
         launchTimes = split(line, ',');//splits the line by ","
         time = launchTimes[4]; // gets the fourth string of the line which represents time
-        //cout << launchTimes[4] << endl;
-        if (!(parse_line(time).ToString() == "0:0:0")) {// if parsed time is not empty
-            sum = sum + parse_line(time);
+        if (parse_line(time,tc)) {// if parsed time does not return false, increment datapoint
+            sum = sum + tc;
             datapoint++;
         }
-        //datapoint++;
     }
     cout << "Datapoints: " << datapoint << endl;
     cout << "average: " << (sum / datapoint).ToString() << endl;
